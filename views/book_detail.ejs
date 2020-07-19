@@ -1,0 +1,64 @@
+<html>
+<%- include('./partials/head.ejs')  %>
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <%- include('./partials/sidebar.ejs') %>
+            <div class='col-sm-10'>
+                <h1><%= book.title %> </h1>
+                <p><strong>Author:</strong></p>
+                <a href=<%= book.author.url %>><%= book.author.name %> </a>
+                <p><strong>Summary:</strong> <%= book.summary %> </p>
+                <p><strong>ISBN:</strong> <%= book.isbn %> </p>
+                <p>
+                    <strong>Genre:</strong>&nbsp
+                    <% book.genre.forEach((val, index) => { %>
+                    <a href=<%= val.url %>>
+                        <%= val.name %>
+                        <% if (index < book.genre.length -1) { %>
+                        ,
+                        <% } %>
+                    </a>
+                    <% }) %>
+                </p>
+                <div style="margin-left:20px; margin-top:20px;">
+                    <h4>Copies</h4>
+
+                    <% if (book_instances.length > 0) { %>
+                    <% book_instances.forEach(val => { %>
+                    <hr />
+                    <% if (val.status =='Available') { %>
+                    <p class='text-success'><%= val.status %> </p>
+                    <% } else if (val.status == 'Maintenance') { %>
+                    <p class='text-danger'><%= val.status %> </p>
+                    <% } else { %>
+                    <p class='text-warning'><%= val.status %> </p>
+                    <% } %>
+                    <p><strong>Imprint:</strong><%= val.imprint %> </p>
+                    <% if (val.status != 'Available') { %>
+                    <p><strong>Due back:</strong><%= val.due_back_formatted %> </p>
+                    <% } %>
+                    <p>
+                        <strong>Id:</strong>&nbsp;
+                        <a href=<%= val.url %>><%= val._id %> </a>
+                    </p>
+
+                    <% }) %>
+                    <% } else { %>
+                    <script>
+                        console.log('Instead here we are')
+                        console.log(window)
+
+                    </script>
+                    <p>There are no copies of this book in the library.</p>
+                    <% } %>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<html>
+<%- include('./partials/head.ejs')  %>
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <%- include('./partials/sidebar.ejs') %>
+            <div class='col-sm-10'>
+                <h1>ID: <%= bookinstance._id %> </h1>
+                <p><strong>Title: </strong></p>
+                <a href=<%= bookinstance.book.url %>><%= bookinstance.book.title %> </a>
+                <p><strong>Imprint:</strong> <%= bookinstance.imprint %> </p>
+                <p><strong> Status:</strong></p>
+                <% if (bookinstance.status =='Available') { %>
+                <span class='text-success'><%= bookinstance.status %> </span>
+                <% } else if (bookinstance.status == 'Maintenance') { %>
+                <span class='text-danger'><%= bookinstance.status %> </span>
+                <% } else { %>
+                <span class='text-warning'><%= bookinstance.status %> </span>
+                <% } %>
+                <% if (bookinstance.status != 'Available') { %>
+                <p><strong>Due back:</strong><%= bookinstance.due_back_formatted %> </p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

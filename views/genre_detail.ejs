@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<%- include('./partials/head.ejs')  %>
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <%- include('./partials/sidebar.ejs') %>
+            <div class='col-sm-10'>
+                <h1><%= genre.name %> </h1>
+                <div style="margin-left:20px; margin-top:20px;">
+                    <h4>Books</h4>
+                    <dl>
+                        <% if (genre_books.length > 0) { %>
+
+                        <% genre_books.forEach(book => { %>
+                        <dt>
+                            <a href=<%= book.url %>><%= book.title %> </a>
+                        </dt>
+                        <dd><%= book.summary %> </dd>
+
+                        <% }) %>
+                        <% } else { %>
+                        <script>
+                            console.log('Instead here we are')
+                            console.log(window)
+
+                        </script>
+                        <dt>This genre has no books</dt>
+                        <% } %>
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
