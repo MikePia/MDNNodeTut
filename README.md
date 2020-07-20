@@ -1,4 +1,5 @@
-#MDN Node tutorail
+#MDN Node tutorial
+These notes are abbreviated from a couple dozen web pages. Dig into the code or go to the tut to get more.
 ## express-generator
 Was used to initialize the project. It sets up the workflow and directories to create a mvc app.
 ### Runit (bash or cmd) -- prefer bash with nodemon
@@ -19,8 +20,9 @@ Was used to initialize the project. It sets up the workflow and directories to c
 
 # Mongoose
     mongodb+srv://<username>:<password>@nodetut.renqw.gcp.nodemongodb.net/library?retryWrites=true&w=majority
-Like everyone else, MDN tut uses Mongodb in atlas. They will use virtual properties. Bingo-- for good practice for FCC project short url to store the malleable url path. The path will change depending on where it gets installed so it is important to isolate the changeable point. 
-## Virtula properties example:
+Like everyone else, MDN tut uses Mongodb in atlas. They will use virtual properties. This is exactly the practice I need for FCC short URL thing. 
+The virtual properties provide a way to change the ouput with minimal code and no need to update the db.  It allows to isolate the changeable point in an application. 
+## Virtual properties example:
 ```JavaScript
 personSchema.virtual('fullName').get(function () {
   return this.name.first + ' ' + this.name.last;
@@ -73,6 +75,44 @@ MDN uses PUG. I opted to stick with ejs to get better at it. So I have to transl
 
 # Did the initial git commit ...
 ... at the end of Part 5 (templates) and before Part 6 (forms)
+### validation will use [express-validator](https://github.com/express-validator/express-validator#express-validator)
 
+# Forms for create stuff
+### First define the create_get and create_post method for genre, author, book and bookinstance
+1. Add the requires from express-generator. Note that sanitize only methods are deprectaed. Using body().escape instead of sanitizeBody().escape() (differing from MDN tut)
+2. In the get methods, do the necessary finds and call render with {title:title, result(s):findResult}
+3. In the post methods, 
+    1. Create an array of of validations and the main callback. The methods will be called in order when sent to the exports through the router.
+    2. In the main callback (req, res, next) =>{}, get the validation errors with ```validationResult()req```
+    3. If errors exist, re-render the form (code will look like the get method) but add the user data and errors to render
+        * The data added will be a model object populated with the data the user entered so far.
+        * errors are the result of validationResult(req)
+    4. If No errors:
+        1. Optionally check the database for a possible  duplicate
+        2. Save the new data
+
+### Create the view as defined in the render above
+#### My stumbling block
+This was a frustrating point of discovery for me in translating from the pug to the ejs code:
+In the pug code. looking for an undefined variable looks like:
+```
+if errors
+  ul
+    for error in errors
+      li!= error.msg
+
+```
+The equvalent code in ejs reveals that pug does a bunch of stuff behind the scene:
+```ejs
+<% if (typeof(errors) != 'undefined') { %>
+    <ul>
+        <% errors.forEach(error => { %>
+            <li><%= error.msg %> </li>
+        <% }) %>
+    </ul>
+<% } %>
+```
+Note: this code is formatted what I would call correctly.. Unfortunately vscode has no ejs formater and the code is formatted as html in vscode: all ejs tags have no indentation either way.
+The advantage of ejs remains that it *is* javascrpt and it *is* html. Obviously it lacks some elegance to retain the entire syntax of both
 
   

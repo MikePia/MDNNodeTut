@@ -1,0 +1,47 @@
+<html>
+
+<%- include('./partials/head.ejs')  %>
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <%- include('./partials/sidebar.ejs') %>
+            <div class='col-sm-10'>
+                <% console.log(typeof(errors)) %>
+                <h1><%= title %> </h1>
+                <form method='POST' action=''>
+                    <div class="form-group">
+                        <label for="first_name">First Name:</label>
+                        <input type="text" placeholder='First Name' name="first_name" required=true id="first_name"
+                            class="form-control" value="<%= ('undefined'===typeof(author) ? '' : author.first_name) %>">
+                        <label for="family_name">Family Name:</label>
+                        <input type="text" placeholder='Family Name' name="family_name" required=true id="family_name"
+                            class="form-control"
+                            value="<%= ('undefined'===typeof(author) ? '' : author.family_name) %>">
+                        <label for='date_of_birth'> Date of birth: </label>
+                        <input id="date_of_birth" class="form-control" type='date' name='date_of_birth'
+                            value="<%= ('undefined'===typeof(author) ? '' : author.date_of_birth) %>">
+                        <label for='date_of_death'> Date of death: </label>
+                        <input id="date_of_death" class="form-control" type='date' name='date_of_death'
+                            value="<%= ('undefined'===typeof(author) ? '' : author.date_of_death) %>">
+                        <button class="btn btn-primary" type='submit'>Submit</button>
+                        <% if (typeof(errors) != 'undefined') { %>
+                        <% console.log(errors[0]) %>
+                        <ul>
+                            <% errors.forEach(error => { %>
+                            <li><%= error.msg %> </li>
+
+                            <% }) %>
+                        </ul>
+                        <% } %>
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

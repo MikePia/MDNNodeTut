@@ -1,0 +1,35 @@
+<html>
+
+<%- include('./partials/head.ejs')  %>
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <%- include('./partials/sidebar.ejs') %>
+            <div class='col-sm-10'>
+                <% console.log(typeof(errors)) %>
+                <h1><%= title %> </h1>
+                <form method='POST' action=''>
+                    <div class="form-group">
+                        <label for="name">Genre:</label>
+                        <input type="text" placeholder='Fantasy, Poetry etc' name="name" id="name" class="form-control"
+                            value="<%= ('undefined'===typeof(genre) ? '' : genre.name) %>" required='true'>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <% if (typeof(errors) != 'undefined') { %>
+                <% console.log(errors[0]) %>
+                <ul>
+                    <% errors.forEach(error => { %>
+                    <li><%= error.msg %> </li>
+
+                    <% }) %>
+                </ul>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
