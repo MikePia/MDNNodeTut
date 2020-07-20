@@ -20,10 +20,15 @@
                         <% let snorks=['The', 'end', 'of', 'the', 'world', 'as', 'we', 'know', 'it!'] %>
                         <select class='form-control' name="author" id="author" required='true'
                             placeholder="Select author">
-                            <% snorks.forEach(snork => { %>
-                            <option value='<%= snork %>'><%= snork %> </option>
-
-
+                            <% authors.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;}); %>
+                            <% authors.forEach(author => { %>
+                            <% if (typeof(book) != 'undefined') { %>
+                            <option value='<%= author._id %>'
+                                selected="<%= (author._id.toString()==book.author ? 'selected' : false) %>">
+                                <%= author.name %> </option>
+                            <% } else { %>
+                            <option value='<%= author._id %>'><%= author.name %> </option>
+                            <% } %>
                             <% }) %>
 
                         </select>
