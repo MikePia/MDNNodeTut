@@ -2,10 +2,11 @@ const Book = require('../models/book');
 const Author = require('../models/author');
 const Genre = require('../models/genre');
 const BookInstance = require('../models/bookinstance');
-const { body, validationResult } = require('express-validator/check')
+const { body, validationResult } = require('express-validator')
 
 const async = require('async');
 const bookinstance = require('../models/bookinstance');
+const book = require('../models/book');
 
 exports.index = (req, res) => {
     async.parallel({
@@ -147,13 +148,59 @@ exports.book_create_post = [
 ]
 
 // Display book delete form on GET
-exports.book_delete_get = (req, res) => {
-    res.send('NOT IMPLEMENTED Book delete GET')
-}
-// Handle book delete on POST
-exports.book_delete_post = (req, res) => {
-    res.send('NOT IMPLEMENTED Book delete POST')
+exports.book_delete_get = (req, res, next) => {
+    async.parallel({
+        book: (callback) => {
+            Book.findById(req.params.id).exec(callback);
+        },
+        bookinstances_book: (callback) => {
+            BookInstance.find({ book: req.params.id }).exec(callback);
+        },
+    }, (err, results) => {
+        if (err) return next(err);
+        if (results.book == null) {
+            res.redirect('/catalog/books')
+        }
+        res.render('book_delete', {
+            title: 'Delete book',
+            book: results.book,
+            bookinstances_book: results.bookinstances_book
+        });
+    });
 };
+// Handle book delete on POST
+// Delete only if no BookInstance of the book exists
+exports.book_delete_post = (req, res, next) => {
+    async.parallel({
+        book: (callback) => {
+            Book.findById(req.params.id).exec(callback);
+        },
+        bookinstance: (callback) => {
+            BookInstance.find({ book: req.params.id}).exec(callback)
+        }
+    }, (err, results)=> {
+        
+        if (err) return next(err);
+        if (results.bookinstance.length > 0) {
+            // This case will propbably not get called as it is found in the form and rerendered there
+            res.render('book_delete', {
+                title: 'Delete Book',
+                book: results.book,
+                bookinstance: results.bookinstance
+            });
+            return
+
+        } else {
+
+            Book.findByIdAndRemove(req.body.bookid, function deleteBook(err) {
+                if (err) return next(err);
+                res.redirect('/catalog/books')
+            })
+        }
+
+
+    })
+}
 
 // Display book update form on GET
 exports.book_update_get = (req, res) => {

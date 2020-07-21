@@ -22,14 +22,10 @@
 
                         <% }) %>
                         <% } else { %>
-                        <script>
-                            console.log('Instead here we are')
-                            console.log(window)
-
-                        </script>
                         <dt>This genre has no books</dt>
                         <% } %>
                     </dl>
+                    <a href="<%= genre.url + '/delete' %> ">Delete genre</a>
                 </div>
 
             </div>

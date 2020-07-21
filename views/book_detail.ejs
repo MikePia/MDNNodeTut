@@ -46,14 +46,10 @@
 
                     <% }) %>
                     <% } else { %>
-                    <script>
-                        console.log('Instead here we are')
-                        console.log(window)
-
-                    </script>
                     <p>There are no copies of this book in the library.</p>
                     <% } %>
                 </div>
+                <a href="<%= book.url + '/delete' %>" >Delete book</a>
 
             </div>
         </div>

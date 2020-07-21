@@ -7,7 +7,6 @@
         <div class='row'>
             <%- include('./partials/sidebar.ejs') %>
             <div class='col-sm-10'>
-                <% console.log(typeof(errors)) %>
                 <h1><%= title %> </h1>
                 <form method='POST' action=''>
                     <div class="form-group">
@@ -18,7 +17,6 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <% if (typeof(errors) != 'undefined') { %>
-                <% console.log(errors[0]) %>
                 <ul>
                     <% errors.forEach(error => { %>
                     <li><%= error.msg %> </li>

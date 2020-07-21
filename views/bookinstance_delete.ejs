@@ -1,0 +1,38 @@
+<html>
+
+<%- include('./partials/head.ejs')  %>
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <%- include('./partials/sidebar.ejs') %>
+            <div class='col-sm-10'>
+                <h1><%= title %> </h1>
+                <h2><%=  bookinstance.book.title %> </h2>
+                <p>Imprint: <%=  bookinstance.imprint %> </p>
+                <p>Id: <%=  bookinstance._id %> </p>
+                <% let cstatus = ['Available', 'Maintenance'].includes(bookinstance.status) ? 'text-success' : 'text-danger'  %>
+                <p class="<%= cstatus %>">Status: <%=  bookinstance.status %>
+                    <% if (bookinstance.status === 'Loaned') { %>
+                        <span>-- Due Back: <%= bookinstance.due_back_formatted %> </span>
+                    <% } %>
+                </p>
+                <% if (['Loaned', 'Reserved'].includes(bookinstance.status)) { %>
+                    <p><strong>Please wait until the book is available or in maintenance to delete.</strong></p>
+                <% } else { %>
+
+                    <p>Do you really want to delete this BookInstance?</p>
+                    <form method='POST' action="">
+                        <div class='form-group'>
+                            <input id="bookinstanceid" name="bookinstanceid" class="form-control" type="hidden" required="true" type="text"
+                                value="<%= bookinstance._id %>">
+                            <button class="btn btn-primary" type="submit">Delete</button>
+                        </div>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

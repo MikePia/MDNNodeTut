@@ -21,14 +21,10 @@
                         <dd><%= book.summary %> </dd>
                         <% }) %>
                         <% } else { %>
-                        <script>
-                            console.log('Instead here we are')
-                            console.log(window)
-
-                        </script>
                         <dt>This author has no books.</dt>
                         <% } %>
                     </dl>
+                    <a href="<%= author.url + '/delete' %> ">Delete author</a>
                 </div>
 
             </div>
