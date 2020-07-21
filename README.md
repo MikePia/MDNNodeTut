@@ -1,4 +1,4 @@
-#MDN Node tutorial
+# MDN Node tutorial
 These notes are abbreviated from a couple dozen web pages. Dig into the code or go to the tut to get more.
 ## express-generator
 Was used to initialize the project. It sets up the workflow and directories to create a mvc app.
