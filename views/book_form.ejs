@@ -20,15 +20,17 @@
                             placeholder="Select author">
                             <% authors.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;}); %>
                             <% authors.forEach(author => { %>
-                            <% if (typeof(book) != 'undefined') { %>
-                            <option value='<%= author._id %>'
-                                selected="<%= (author._id.toString()==book.author ? 'selected' : false) %>">
-                                <%= author.name %> </option>
-                            <% } else { %>
-                            <option value='<%= author._id %>'><%= author.name %> </option>
-                            <% } %>
+                            
+                                <% if (typeof(book) != 'undefined') { %>
+                                    <% if (author._id.toString() == book.author._id || author._id.toString()==book.author ) { %>
+                                        <option value='<%= author._id %>' selected> <%= author.name %> </option>
+                                    <% } else { %>
+                                        <option value='<%= author._id %>'> <%= author.name %> </option>
+                                    <% } %>
+                                <% } else { %>
+                                    <option value='<%= author._id %>'><%= author.name %> </option>
+                                <% } %>
                             <% }) %>
-
                         </select>
                     </div>
 
@@ -43,19 +45,26 @@
                             value="<%= (typeof(book) === 'undefined' ? '' : book.isbn) %>" required='true'>
                     </div>
                     <div class="form-group">
+                        
                         <label>Genre:</label>
-                        <% genres.forEach(genre => { %>
-                        <div style='display: inline; padding-right:10px;'>
-                            <input type="checkbox" class="checkbox-input" name='genre' id="<%= genre._id %>"
-                                value="<%= genre._id %>" checked="<%= genre.checked %>">
-                            <label for="<%= genre._id %>"><%= genre.name %> </label>
-                        </div>
+                        <% 
+                        let gen_array=[];
+                        if (typeof(book) != 'undefined') {  
+                            book.genre.forEach(gen => {gen_array.push(gen.name)})
+                            console.log(gen_array)
+                        } 
+                        genres.forEach(genre => { 
+                            let checked=null 
+                            if (gen_array.includes(genre.name)) { checked='checked' }
+                            %> 
+                            <div style='display: inline; padding-right:10px;'>
+                                <input type="checkbox" class="checkbox-input" name='genre' id="<%= genre._id %>"
+                                    value="<%= genre._id %>" <%= checked %> >
+                                <label for="<%= genre._id %>"><%= genre.name %> </label>
+                            </div>
 
                         <% }) %>
-
-
                     </div>
-
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>

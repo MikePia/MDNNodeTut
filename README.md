@@ -144,8 +144,8 @@ The tutorial 'challenges' to provide delete for book, bookinstance and genre
 * Book deletion requires there is no bookinstance of the book
 * Author instance requires there is no Book by the author
 * BookInstance deletion requires there the bookinstance is not loaned or reserved status
-### Pitfalls
-* Using async.parallel
+## Misc Pitfalls
+#### Using async.parallel
     * Send a object of functions to async parallel, get the results in the callback
     ```Javascript
     exports.arouterfunc = (req, res, next) ={
@@ -157,12 +157,49 @@ The tutorial 'challenges' to provide delete for book, bookinstance and genre
     }
     ```
       I think you can also send a list of functions.
-    * Using it to populate data from Mongo, each find function must end with .exec() and if it doesn't, the errors are not helpful. The behavior I got was the call just hung.
+    * Using it to populate data from Mongo, each find function must end with callback in the argument. If the call is daisy chained then ```<model>.x().y().exec(callback)``` is used. If not then ```<model>.find(callback)```  is fine. If the callback is absent, the errors are not helpful. The behavior I got was the call just hung.
     * My last resort debugging process was to rewrite the controller method bit by bit. On the one hand, its effective and solidifies my understanding. OTOH I think I have not yet discovered the more effecient debugging tools I need.
-* Other tutorials used different asynchronous tools. 
+* Other tutorials used different asynchronous tools. I think, generally one of these approaches only should be used in a project. Its anti-zen of js.  Create as many ways to do things as possible and make none of them the obvious choice.
     * The FCC challenges used a 'done' callback out of ? library
-    * The NetNinja tutorial used promises with .then() and .catch(). These were great.
+    * The NetNinja tutorial used promises with .then() and .catch(). These are great and should be the obvious choice but the busy bodies continue to evolve the language with prejuidice and without need or pattern.
     * async does about a million other things that I don't know I need.
+    * fetch 
+### Problems with MDN tut html code?
+* In html ```<Select><Options selected>...```  the selected attribute is existant or not. selected=false resolves to true
+* Similarly in input checkbox checked, checked is there or not.
+Pug code From the tut
+```Pug
+option(value=author._id selected=( author._id.toString()==book.author._id || author._id.toString()==book.author ) ? 'selected' : false ) #{author.name}
+```
+I believe (?) the selected attribute resolves in the html file to either:
+```selected='selected'``` or ```selected=false```
+In both cases selected is turned on. The result in my case was everything was selected, so it chose the last one. 
+Similarly the checked attribute resolved to all true and everything was checked.
+
+Here is some really ugly ejs code I used to fix up the checkboxes
+```
+<div class="form-group">
+    <label>Genre:</label>
+    <% 
+    let gen_array=[];
+    if (typeof(book) != 'undefined') {  
+        book.genre.forEach(gen => {gen_array.push(gen.name)})
+    } 
+    genres.forEach(genre => { 
+        let checked=null 
+        if (gen_array.includes(genre.name)) { checked='checked' }
+        %> 
+        <div style='display: inline; padding-right:10px;'>
+            <input type="checkbox" class="checkbox-input" name='genre' id="<%= genre._id %>"
+                value="<%= genre._id %>" <%= checked %> >
+            <label for="<%= genre._id %>"><%= genre.name %> </label>
+        </div>
+
+    <% }) %>
+</div>
+
+```
+The problem with the code is the random mixing of GET and PORT variables. One possible fix for this file would be to supply the GET and POST with the same variables, just with empty values where they should be empty. OTOH display is sometimes messy period. 
 
 
 
