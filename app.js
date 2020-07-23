@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var helmet = require('helmet')
 const mongoose = require('mongoose')
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -10,9 +11,11 @@ var usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
 
 var app = express();
+app.use('helmet')
 
 // const MONGO_URI = 'mongodb+srv://root:thubten0@nodetut.renqw.gcp.mongodb.net/node-tut?retryWrites=true&w=majority'
-const MONGO_URI = 'mongodb+srv://root:thubten0@nodetut.renqw.gcp.mongodb.net/library?retryWrites=true&w=majority'
+const dev_db_url = 'mongodb+srv://root:thubten0@nodetut.renqw.gcp.mongodb.net/library?retryWrites=true&w=majority'
+const MONGO_URI = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
