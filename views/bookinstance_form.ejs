@@ -11,24 +11,31 @@
                 <form method='POST' action=''>
                     <div class='form-group'>
                         <label for="book">Book</label>
-                        <select class='form-control' name="book" id="book" required='true' placeholder="Select book">
-                            <% book_list.sort(function(a, b) {
-                                let textA = a.title.toUpperCase(); 
-                                let textB = b.title.toUpperCase(); 
-                                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-                            %>
-                            <% book_list.forEach(book => { %>
-                                <% if (typeof(bookinstance) != 'undefined') { %>
-                                    <option value='<%= book._id %>' selected="<%= (bookinstance.book.toString()==book._id.toString() ? 'selected' : false) %>">
-                                        <%= book.title %>
-                                    </option>
-                                <% } else { %>
-                                    <option value='<%= book._id %>'>
-                                        <%= book.title %>
-                                    </option>
-                                <% } %>
-                            <% }) %>
-                        </select>
+                        <% if ('undefined' === typeof(controlvar)) { %>
+                         
+                        
+                            <select class='form-control' name="book" id="book" required='true' placeholder="Select book">
+                                <% book_list.sort(function(a, b) {
+                                    let textA = a.title.toUpperCase(); 
+                                    let textB = b.title.toUpperCase(); 
+                                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                                %>
+                                <% book_list.forEach(book => { %>
+                                    <% if (typeof(bookinstance) != 'undefined') { %>
+                                        <option value='<%= book._id %>' selected="<%= (bookinstance.book.toString()==book._id.toString() ? 'selected' : false) %>">
+                                            <%= book.title %>
+                                        </option>
+                                    <% } else { %>
+                                        <option value='<%= book._id %>'>
+                                            <%= book.title %>
+                                        </option>
+                                    <% } %>
+                                <% }) %>
+                            </select>
+                        <% } else { %>
+                            <% console.log(bookinstance.book.title) %> 
+                             <input class='form-control' type='text' name="book" id="book" value="<%= bookinstance.book.title %>"  readonly>
+                        <% } %>
                     </div>
                     <div class='form-group'>
                         <label for="imprint">Imprint: </label>

@@ -176,10 +176,10 @@ exports.book_delete_post = (req, res, next) => {
             Book.findById(req.params.id).exec(callback);
         },
         bookinstance: (callback) => {
-            BookInstance.find({ book: req.params.id}).exec(callback)
+            BookInstance.find({ book: req.params.id }).exec(callback)
         }
-    }, (err, results)=> {
-        
+    }, (err, results) => {
+
         if (err) return next(err);
         if (results.bookinstance.length > 0) {
             // This case will propbably not get called as it is found in the form and rerendered there
@@ -217,32 +217,34 @@ exports.book_update_get = (req, res, next) => {
         },
     }, (err, results) => {
         if (err) return next(err);
-        if (results.book==null) {
+        if (results.book == null) {
             let err = new Error('Book not found');
             err.status = 404;
             return next(err);
         }
         // ig: genre iterator, bg: book.genre iterator
         for (let ig = 0; ig < results.genres.length; ig++) {
+            results.genres[ig].checked = null;
             for (let bg = 0; bg < results.book.genre.length; bg++) {
-                if(results.genres[ig]._id.toString()==results.book.genre[bg]._id.toString()) {
-                    results.genres[ig].checked='true';
+                if (results.genres[ig].name == results.book.genre[bg].name) {
+                    results.genres[ig].checked = 'checked';
+                    break;
                 }
             }
         }
-        res.render('book_form', { 
-            title: 'Update Book', 
-            authors: results.authors, 
-            genres: results.genres, 
+        res.render('book_form', {
+            title: 'Update Book',
+            authors: results.authors,
+            genres: results.genres,
             book: results.book
         });
     });
 };
 
 // Handle book update on POST
-exports.book_update_post =  [ 
+exports.book_update_post = [
     (req, res, next) => {
-        if(!(req.body.genre instanceof Array)) {
+        if (!(req.body.genre instanceof Array)) {
             if (typeof req.body.genre === 'undefined') {
                 req.body.genre = [];
             } else {
@@ -251,15 +253,15 @@ exports.book_update_post =  [
         }
         next();
     },
-    body('title', 'Title must not be empty.').trim().isLength({ min: 1}).escape(),
-    body('author', 'Author must not be empty.').trim().isLength({ min: 1}).escape(),
-    body('summary', 'Summary must not be empty.').trim().isLength({ min: 1}).escape(),
-    body('isbn', 'ISBN must not be empty.').trim().isLength({ min: 1}),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('isbn', 'ISBN must not be empty.').trim().isLength({ min: 1 }),
     body('genre.*').escape(),
 
     (req, res, next) => {
         const errors = validationResult(req);
-        let book = new Book (
+        let book = new Book(
             {
                 title: req.body.title,
                 author: req.body.author,
@@ -271,27 +273,33 @@ exports.book_update_post =  [
         if (!errors.isEmpty()) {
             // Re-render to fix errors 
             // basciclly repeating the get method-- bad form
+            // The client takes care of the required but empty fields w/o going to the server. What errors could be produced?
             async.parallel({
                 authors: (callback) => {
                     Author.find(callback);
                 },
-                genres: (callback)=> {
+                genres: (callback) => {
                     Genre.find(callback);
                 },
             }, (err, results) => {
-                if (err) return next (err);
+                if (err) return next(err);
 
-                // Mark selected genres as checked
-                for(let i = 0; i < results.genres.length; i++) {
-                    if(book.genre.indexOf(results.genres[i]._id) > -1) {
-                        results.genres[i].checked = 'true';
+                // Mark selected genres as 'checked' or null
+                for (let ig = 0; ig < results.genres.length; ig++) {
+                    results.genres[ig].checked = null;
+                    for (let bg = 0; bg < results.book.genre.length; bg++) {
+                        if (results.genres[ig].name == results.book.genre[bg].name) {
+                            results.genres[ig].checked = 'checked';
+                            break;
+                        }
                     }
                 }
                 res.render('book_form', {
                     title: 'Update Book',
                     authors: results.authors,
-                    genres: results.genres, 
-                    book: book, errors: errors.array()
+                    genres: results.genres,
+                    book: book, 
+                    errors: errors.array()
                 });
             });
             return;

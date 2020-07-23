@@ -200,6 +200,8 @@ Here is some really ugly ejs code I used to fix up the checkboxes
 
 ```
 The problem with the code is the random mixing of GET and PORT variables. One possible fix for this file would be to supply the GET and POST with the same variables, just with empty values where they should be empty. OTOH display is sometimes messy period. 
+# Before I check this in. Account for:
+bookController get creates the value genres that I am not using. It could simplify the ejs file
 
 
 

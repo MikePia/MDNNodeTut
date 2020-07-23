@@ -23,6 +23,9 @@
                         <label for='date_of_death'> Date of death: </label>
                         <input id="date_of_death" class="form-control" type='date' name='date_of_death'
                             value="<%= ('undefined'===typeof(author) ? '' : author.date_of_death) %>">
+                        <% if ('undefined'===typeof(author)) { %>
+                            <p><strong>Are you sure you want to update this author?</strong></p>
+                        <% } %>
                         <button class="btn btn-primary" type='submit'>Submit</button>
                         <% if (typeof(errors) != 'undefined') { %>
                         <ul>

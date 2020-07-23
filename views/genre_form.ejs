@@ -8,21 +8,37 @@
             <%- include('./partials/sidebar.ejs') %>
             <div class='col-sm-10'>
                 <h1><%= title %> </h1>
+
+ 
                 <form method='POST' action=''>
                     <div class="form-group">
                         <label for="name">Genre:</label>
                         <input type="text" placeholder='Fantasy, Poetry etc' name="name" id="name" class="form-control"
-                            value="<%= ('undefined'===typeof(genre) ? '' : genre.name) %>" required='true'>
+                        value="<%= ('undefined'===typeof(genre) ? '' : genre.name) %>" required='true'>
+                    </div>
+                    <div>
+                        <% if ('undefined' != typeof(genre_books)) { %>
+                            <p>Goes here</p>
+                            <% if (genre_books.length > 0) { %>
+                                <p>The following books will be affected.</p>
+                                <ul>
+                                    <% genre_books.forEach(gbook => { %>
+                                        <li> <%= gbook.title %> </li>
+                                    <% }) %>
+                                </ul>
+                            <% } %>
+                            <p>Are you sure you want to update this genre?</p>
+                        <% } %>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <% if (typeof(errors) != 'undefined') { %>
-                <ul>
-                    <% errors.forEach(error => { %>
-                    <li><%= error.msg %> </li>
+                    <ul>
+                        <% errors.forEach(error => { %>
+                           <li><%= error.msg %> </li>
 
-                    <% }) %>
-                </ul>
+                        <% }) %>
+                    </ul>
                 <% } %>
             </div>
         </div>
