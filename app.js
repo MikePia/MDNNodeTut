@@ -11,7 +11,7 @@ var usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
 
 var app = express();
-app.use('helmet')
+app.use(helmet());
 
 // const MONGO_URI = 'mongodb+srv://root:thubten0@nodetut.renqw.gcp.mongodb.net/node-tut?retryWrites=true&w=majority'
 const dev_db_url = 'mongodb+srv://root:thubten0@nodetut.renqw.gcp.mongodb.net/library?retryWrites=true&w=majority'

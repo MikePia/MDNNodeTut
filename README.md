@@ -3,6 +3,7 @@ These notes are abbreviated from a couple dozen web pages. Dig into the code or 
 ## express-generator
 Was used to initialize the project. It sets up the workflow and directories to create a mvc app.
 ### Runit (bash or cmd) -- prefer bash with nodemon
+Replace 'locallibrary' with the name of the project directory and call the command from that directory
 * npm install
 * DEBUG=locallibrary:* npm start
 * DEBUG=locallibrary:* nodemon ./bin/www
