@@ -201,10 +201,16 @@ Here is some really ugly ejs code I used to fix up the checkboxes
 
 ```
 The problem with the code is the random mixing of GET and PORT variables. One possible fix for this file would be to supply the GET and POST with the same variables, just with empty values where they should be empty. OTOH display is sometimes messy period. 
-# Before I check this in. Account for:
-bookController get creates the value genres that I am not using. It could simplify the ejs file
 
-
+# Installed it in free Heoku account at:
+https://desolate-lake-69336.herokuapp.com/
+Used the heroku cli app. 
+* heroku login
+* heroku create
+* git push heroku master
+* heroku open
+And voila, its installed and running. That was cool.
+Note that it still has a glaring  instance of the mongo devdb url sitting on app.js. A production db would be installed at process.env.MONGODB_URI. That could be an envirionment variable or a .env file (or both). There is no logger set up but then no logging is being done.
 
 
 
